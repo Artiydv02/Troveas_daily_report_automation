@@ -27,8 +27,8 @@ The crew orchestrates daily sales reporting by chaining four specialized agents.
 ## Highlights
 
 - **End-to-end automation**: download → analyze → email → cleanup with shared memory between agents.
-- **Tenant-aware Uniware tooling**: password-grant auth, export polling, CSV download, and resilient error capture for the `priyankdesigns` tenant.
-- **Data hygiene**: eliminates cancelled/unfulfillable orders, normalizes channels, and appends summary totals in `Troveas_Report_<date>.xlsx`.
+- **Tenant-aware Uniware tooling**: password-grant auth, export polling, CSV download, and resilient error capture for the `tenant_name` tenant.
+- **Data hygiene**: eliminates cancelled/unfulfillable orders, normalizes channels, and appends summary totals in `Report_<date>.xlsx`.
 - **Email fan-out**: reads primary/CC recipients from `knowledge/user_preference.txt`, attaches the newest Excel artifact, and delivers via SMTP (defaults to Gmail).
 - **Operational helpers**: `record_api_error.py` traps failing payloads for Uniware support, while `debug_encoding.py` reveals encoding issues that can break SMTP auth.
 
@@ -111,9 +111,9 @@ Windows Task Scheduler or cron can invoke the same commands for unattended execu
 ## Agents, Tasks, and Tools
 
 - **Downloader (`Uniware API Specialist`)** – `UniwareAPITools` authenticates via password grant, creates a “Sale Orders” export for yesterday + month-to-date, polls for completion, and downloads the CSV.
-- **Analyst (`Data Analyst`)** – `DataAnalysisTools` locates the newest CSV, filters cancelled/returned orders, groups by channel, appends totals, and writes `Troveas_Report_<date>.xlsx`.
-- **Communicator (`Communications Officer`)** – `EmailTools` reads the recipient file, attaches the latest Excel workbook, and sends it with subject `Troveas Daily Business Report`. Default SMTP host: `smtp.gmail.com:587`.
-- **Cleanup (`File Cleanup Specialist`)** – `CleanupTools` removes any `uniware_sales_*.csv` and `Troveas_Report_*.xlsx` files once email delivery succeeds.
+- **Analyst (`Data Analyst`)** – `DataAnalysisTools` locates the newest CSV, filters cancelled/returned orders, groups by channel, appends totals, and writes `Report_<date>.xlsx`.
+- **Communicator (`Communications Officer`)** – `EmailTools` reads the recipient file, attaches the latest Excel workbook, and sends it with subject ` Daily Business Report`. Default SMTP host: `smtp.gmail.com:587`.
+- **Cleanup (`File Cleanup Specialist`)** – `CleanupTools` removes any `uniware_sales_*.csv` and `Report_*.xlsx` files once email delivery succeeds.
 
 ## Helper Scripts
 
@@ -132,7 +132,7 @@ Windows Task Scheduler or cron can invoke the same commands for unattended execu
 ## Troubleshooting
 
 - **Authentication failures** – Confirm `.env` paths and strip hidden characters (Word often inserts non-breaking spaces). `record_api_error.py` prints masked credential lengths to help debug.
-- **No CSV downloaded** – Verify `UNIWARE_*` credentials and the tenant slug (`priyankdesigns`). The downloader polls up to 10 times (≈100 seconds); increase the retry loop if your exports are slower.
+- **No CSV downloaded** – Verify `UNIWARE_*` credentials and the tenant slug (`tenant name`). The downloader polls up to 10 times (≈100 seconds); increase the retry loop if your exports are slower.
 - **Pandas errors** – Uniware occasionally changes column headers. Update the normalization logic in `DataAnalysisTools` whenever the schema shifts.
 - **Email not sent** – Ensure the SMTP account allows programmatic access. For Gmail with 2FA, create an App Password. Logs show the exact `smtplib` exception.
 - **Files not removed** – Run the crew inside a directory with delete permissions. Cleanup only triggers after a successful email send, so earlier failures leave artifacts for inspection.
@@ -140,7 +140,7 @@ Windows Task Scheduler or cron can invoke the same commands for unattended execu
 ## Roadmap
 
 - Add automated tests (mocking Uniware responses + Pandas transformations).
-- Parameterize tenant/facility instead of hardcoding `priyankdesigns`.
+- Parameterize tenant/facility instead of hardcoding `tenant_name`.
 - Externalize SMTP host/port into config to support multiple providers per environment.
 
 ## License
