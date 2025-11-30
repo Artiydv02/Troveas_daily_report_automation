@@ -1,0 +1,3 @@
+put the recipient mail addresses that you want this system to send the report in the below format
+bsdgfiu@gmail.com
+kjsbdfgi@gmail.com

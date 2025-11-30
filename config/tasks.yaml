@@ -1,0 +1,34 @@
+download_report_task:
+  description: "Connect to Uniware API, get an access token, create a sales report export job for the previous day, wait for it to complete, and download the file. The downloaded file should be in CSV format. Return the path of the downloaded file."
+  expected_output: "A string containing the local file path of the downloaded CSV report."
+
+analysis_task:
+  description: >
+    Process the CSV file that was downloaded from Uniware in the previous task.
+    You must generate a consolidated report that shows both the previous day's sales figures
+    and the month-to-date (MTD) figures.
+    The report must be grouped by 'Channel Name' and show 'Qty' (Count of Item SKU Code)
+    and 'Amt' (Sum of Total Price).
+    Exclude any orders with a status of 'cancelled' or that are blank.
+    Save the final, formatted report as a new Excel file (.xlsx).
+  expected_output: >
+    A confirmation string stating the path to the newly created Excel report file.
+
+email_task:
+  description: >
+    Take the final Excel report file path generated from the analysis task and email it.
+    You must read the recipient's email from the 'knowledge/user_preference.txt' file.
+    The email subject should be 'Troveas Daily Business Report'.
+    The body of the email should be a polite message informing the recipient about the attached report.
+    Confirm that the email has been sent successfully.
+  expected_output: >
+    A success message confirming the email has been sent to the recipient.
+
+cleanup_task:
+  description: >
+    After the email has been sent successfully, delete all temporary files from the workspace.
+    You must delete both the CSV file (uniware_sales_*.csv) and the Excel report file (Troveas_Report_*.xlsx)
+    that were generated during the reporting process. Only proceed with cleanup if the email task
+    completed successfully. Confirm that all files have been deleted.
+  expected_output: >
+    A confirmation message listing all files that were deleted during cleanup.

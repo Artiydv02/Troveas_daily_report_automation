@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "daily_business_report"
+version = "0.1.0"
+description = "A crew to automate daily business reporting."
+authors = ["CrewAI"]
+packages = [{include = "daily_business_report"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<=3.13"
+crewai = "^0.28.8"
+crewai-tools = "^0.1.5"
+python-dotenv = "^1.0.0"
+pandas = "^2.2.1"
+openpyxl = "^3.1.2"
+langchain-openai = "^0.1.1"
+PyYAML = "^6.0"
+requests = "^2.31.0"
+
+[tool.poetry.scripts]
+run = "daily_business_report.main:run"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

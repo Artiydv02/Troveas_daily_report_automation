@@ -1,0 +1,7 @@
+crewai
+pandas
+openpyxl
+python-dotenv
+PyYAML
+langchain-openai
+requests
